@@ -5,8 +5,9 @@
 using namespace glm;
 using namespace std;
 
-Chunk::Chunk(Cube* grass, Cube* water, Cube* wood, Cube* leaf, unsigned int seed, int offsetX, int offsetZ)
+Chunk::Chunk(Camera camera, Cube* grass, Cube* water, Cube* wood, Cube* leaf, unsigned int seed, int offsetX, int offsetZ)
 {
+	this->camera = camera;
 	this->offsetX = offsetX;
 	this->offsetZ = offsetZ;
 	this->seed = seed;
@@ -87,21 +88,24 @@ bool Chunk::isLeftShadow(int x, int z)
 
 void Chunk::RenderChunk(int uniformModel, int uniformProjection, int uniformView)
 {
+	mat4 view = camera.calculateViewMatrix();
 	Cube* currentCube = nullptr;
 
 	for (int x = 0; x < chunk.size(); x++)
 	{
+		float xPos = (x * CUBE_SIZE) + offsetX;
+
 		for (int z = 0; z < chunk[x].size(); z++)
 		{
+			float zPos = (z * CUBE_SIZE) + offsetZ;
+
 			// Draw under cubes
 			for (int y = 0; y < chunk[x][z] + 1; y++)
 			{
 				currentCube = isWater(x, y, z) ? water : grass;
 
-				currentCube->PrepareRender(uniformModel, uniformProjection, uniformView,
-					(x * CUBE_SIZE) + offsetX,
-					(y * CUBE_SIZE),
-					(z * CUBE_SIZE) + offsetZ);
+				currentCube->PrepareRender(view, uniformModel, uniformProjection, uniformView,
+					xPos, (y * CUBE_SIZE), zPos);
 
 				if (y == chunk[x][z])
 				{
@@ -117,10 +121,8 @@ void Chunk::RenderChunk(int uniformModel, int uniformProjection, int uniformView
 				// Log
 				for (int i = 0; i < TREE_HEIGHT; i++)
 				{
-					currentCube->PrepareRender(uniformModel, uniformProjection, uniformView,
-						(x * CUBE_SIZE) + offsetX,
-						(chunk[x][z] + 1 + i) * CUBE_SIZE,
-						(z * CUBE_SIZE) + offsetZ);
+					currentCube->PrepareRender(view, uniformModel, uniformProjection, uniformView,
+						xPos, (chunk[x][z] + 1 + i) * CUBE_SIZE, zPos);
 
 					wood->RenderSidesTop();
 				}
@@ -131,7 +133,7 @@ void Chunk::RenderChunk(int uniformModel, int uniformProjection, int uniformView
 				{
 					for (const auto& par : layer)
 					{
-						currentCube->PrepareRender(uniformModel, uniformProjection, uniformView,
+						currentCube->PrepareRender(view, uniformModel, uniformProjection, uniformView,
 							((x + par.first) * CUBE_SIZE) + offsetX,
 							(chunk[x][z] + 1 + TREE_HEIGHT - i) * CUBE_SIZE,
 							((z + par.second) * CUBE_SIZE) + offsetZ);
@@ -156,7 +158,7 @@ void Chunk::RenderChunk(int uniformModel, int uniformProjection, int uniformView
 								currentCube = water;
 							}
 
-							currentCube->PrepareRender(uniformModel, uniformProjection, uniformView,
+							currentCube->PrepareRender(view, uniformModel, uniformProjection, uniformView,
 								((x + par.first) * CUBE_SIZE) + offsetX,
 								chunk[par.first + x][par.second + z] * CUBE_SIZE,
 								((z + par.second) * CUBE_SIZE) + offsetZ);

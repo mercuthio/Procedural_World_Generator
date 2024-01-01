@@ -18,6 +18,7 @@
 #include "Camera.h"
 #include "Chunk.h"
 #include "Texture.h"
+#include "Light.h"
 
 using namespace glm;
 
@@ -31,6 +32,8 @@ Window mainWindow;
 std::vector<Shader> shaderList;
 
 Camera camera;
+
+Light light;
 
 Texture dirtText;
 Texture dirtShadowText;
@@ -48,7 +51,9 @@ Cube* leaf;
 
 Chunk* chunk;
 
-GLuint uniformProjection = 0, uniformModel = 0, uniformView = 0;
+GLuint uniformProjection = 0, uniformModel = 0, uniformView = 0, 
+	   uniformAmbientColour = 0, uniformAmbientIntensity = 0, 
+	   uniformDirection = 0, uniformDiffuseIntensity = 0;
 
 GLfloat deltaTime = 0.0f;
 GLfloat lastTime = 0.0f;
@@ -91,10 +96,12 @@ void CreateObjects()
 	leafText = Texture("Textures/mineLeaf.png");
 	leafText.LoadTexture();
 
-	grass = new Cube(projection, &camera, grassText.GetTextId(), dirtText.GetTextId(), grassShadowText.GetTextId(), dirtShadowText.GetTextId());
-	water = new Cube(projection, &camera, waterText.GetTextId(), waterText.GetTextId(), waterShadowText.GetTextId(), waterShadowText.GetTextId());
-	wood = new Cube(projection, &camera, woodText.GetTextId(), woodText.GetTextId());
-	leaf = new Cube(projection, &camera, leafText.GetTextId(), leafText.GetTextId());
+	grass = new Cube(projection, grassText.GetTextId(), dirtText.GetTextId(), grassShadowText.GetTextId(), dirtShadowText.GetTextId());
+	water = new Cube(projection, waterText.GetTextId(), waterText.GetTextId(), waterShadowText.GetTextId(), waterShadowText.GetTextId());
+	wood = new Cube(projection, woodText.GetTextId(), woodText.GetTextId());
+	leaf = new Cube(projection, leafText.GetTextId(), leafText.GetTextId());
+
+	light = Light(COLOR_AMBIENT_LIGHT, COLOR_AMBIENT_INTENSITY, LIGHT_DIRECTION, LIGHT_INTENSITY);
 }
 
 void CreateShaders()
@@ -201,7 +208,7 @@ void RenderChunks()
 		float offsetX = par.second * CHUNK_SIZE + camera.GetXposition() - CHUNK_SIZE / 2;
 		float offsetZ = par.first * CHUNK_SIZE + camera.GetZposition() - CHUNK_SIZE / 2;
 
-		chunk = new Chunk(grass, water, wood, leaf, seed, offsetX, offsetZ);
+		chunk = new Chunk(camera, grass, water, wood, leaf, seed, offsetX, offsetZ);
 		chunk->GenerateChunk();
 		chunk->RenderChunk(uniformModel, uniformProjection, uniformView);
 	}
@@ -241,6 +248,13 @@ int main()
 		uniformModel = shaderList[0].GetModelLocation();
 		uniformProjection = shaderList[0].GetProjectionLocation();
 		uniformView = shaderList[0].GetViewLocation();
+		uniformAmbientColour = shaderList[0].GetAmbientColourLocation();
+		uniformAmbientIntensity = shaderList[0].GetAmbientIntensityLocation();
+		uniformDirection = shaderList[0].GetDirectionLocation();
+		uniformDiffuseIntensity = shaderList[0].GetDiffuseIntensityLocation();
+
+		light.UseLight(uniformAmbientIntensity, uniformAmbientColour, 
+					   uniformDirection, uniformDiffuseIntensity);
 
 		RenderChunks();
 

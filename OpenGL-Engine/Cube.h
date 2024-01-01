@@ -15,27 +15,27 @@ const int TOP_FACE = 24;
 const int BOTTOM_FACE = 30;
 
 static GLfloat cubeVertices[] = {
-	//	x		y		z		u		v
-		-1.0f, -1.0f, 0.0f,		0.0f, 0.0f,		//0
-		1.0f, -1.0f, 0.0f,		1.0f, 0.0f,		//1
-		-1.0f, 1.0f, 0.0f,		0.0f, 1.0f,		//2
-		1.0f, 1.0f, 0.0f,		1.0f, 1.0f,		//3
+	//	x		y		z		u		v		nx	  ny    nz
+		-1.0f, -1.0f, 0.0f,		0.0f, 0.0,		0.0f, 0.0f, 0.0f,	//0
+		1.0f, -1.0f, 0.0f,		1.0f, 0.0,		0.0f, 0.0f, 0.0f,	//1
+		-1.0f, 1.0f, 0.0f,		0.0f, 1.0,		0.0f, 0.0f, 0.0f,	//2
+		1.0f, 1.0f, 0.0f,		1.0f, 1.0,		0.0f, 0.0f, 0.0f,	//3
 
-		-1.0f, -1.0f, -1.0f,	1.0f, 0.0f,		//4
-		1.0f, -1.0f, -1.0f,		0.0f, 0.0f,		//5
-		-1.0f, 1.0f, -1.0f,		1.0f, 1.0f,		//6
-		1.0f, 1.0f, -1.0f,		0.0f, 1.0f,		//7
+		-1.0f, -1.0f, -1.0f,	1.0f, 0.0f,		0.0f, 0.0f, 0.0f,	//4
+		1.0f, -1.0f, -1.0f,		0.0f, 0.0f,		0.0f, 0.0f, 0.0f,	//5
+		-1.0f, 1.0f, -1.0f,		1.0f, 1.0f,		0.0f, 0.0f, 0.0f,	//6
+		1.0f, 1.0f, -1.0f,		0.0f, 1.0f,		0.0f, 0.0f, 0.0f,	//7
 
 		// Top face
-		-1.0f, 1.0f, 0.0f,		0.0f, 0.0f,		//8
-		-1.0f, 1.0f, -1.0f,		0.0f, 1.0f,		//9
-		1.0f, 1.0f, 0.0f,		1.0f, 0.0f,		//10
-		1.0f, 1.0f, -1.0f,		1.0f, 1.0f,		//11
+		-1.0f, 1.0f, 0.0f,		0.0f, 0.0f,		0.0f, 0.0f, 0.0f,	//8
+		-1.0f, 1.0f, -1.0f,		0.0f, 1.0f,		0.0f, 0.0f, 0.0f,	//9
+		1.0f, 1.0f, 0.0f,		1.0f, 0.0f,		0.0f, 0.0f, 0.0f,	//10
+		1.0f, 1.0f, -1.0f,		1.0f, 1.0f,		0.0f, 0.0f, 0.0f,	//11
 
-		-1.0f, -1.0f, 0.0f,		0.0f, 1.0f,		//12
-		-1.0f, -1.0f, -1.0f,	0.0f, 0.0f,		//13
-		1.0f, -1.0f, 0.0f,		1.0f, 1.0f,		//14
-		1.0f, -1.0f, -1.0f,		1.0f, 0.0f,		//15
+		-1.0f, -1.0f, 0.0f,		0.0f, 1.0f,		0.0f, 0.0f, 0.0f,	//12
+		-1.0f, -1.0f, -1.0f,	0.0f, 0.0f,		0.0f, 0.0f, 0.0f,	//13
+		1.0f, -1.0f, 0.0f,		1.0f, 1.0f,		0.0f, 0.0f, 0.0f,	//14
+		1.0f, -1.0f, -1.0f,		1.0f, 0.0f,		0.0f, 0.0f, 0.0f,	//15
 };
 
 static unsigned int cubeIndices[] = {
@@ -62,10 +62,10 @@ class Cube
 {
 public:
 	Cube();
-	Cube(glm::mat4 projection, Camera* camera, GLuint topTextureID, GLuint mainTextureID, GLuint shadowTextureID, GLuint mainShadowTextureID);
-	Cube(glm::mat4 projection, Camera* camera, GLuint mainTextureID, GLuint mainShadowTextureID);
+	Cube(glm::mat4 projection, GLuint topTextureID, GLuint mainTextureID, GLuint shadowTextureID, GLuint mainShadowTextureID);
+	Cube(glm::mat4 projection, GLuint mainTextureID, GLuint mainShadowTextureID);
 
-	void PrepareRender(int uniformModel, int uniformProjection, int uniformView, float x, float y, float z);
+	void PrepareRender(glm::mat4 view, int uniformModel, int uniformProjection, int uniformView, float x, float y, float z);
 	void RenderAllFaces();
 	void RenderSidesTop();
 	void RenderTopFace();
@@ -86,7 +86,8 @@ public:
 	GLuint mainShadowTextureID;
 
 private:
+	void calcAverageNormals(unsigned int vLength, unsigned int normalOffset);
+
 	glm::mat4 projection;
-	Camera* camera;
 };
 

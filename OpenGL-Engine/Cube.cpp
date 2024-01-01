@@ -4,13 +4,14 @@ using namespace glm;
 
 Cube::Cube() {}
 
-Cube::Cube(glm::mat4 projection, Camera* camera, GLuint topTextureID, GLuint mainTextureID, GLuint shadowTextureID, GLuint mainShadowTextureID)
+Cube::Cube(glm::mat4 projection,  GLuint topTextureID, GLuint mainTextureID, GLuint shadowTextureID, GLuint mainShadowTextureID)
 {
-	this->camera = camera;
 	this->projection = projection;
 
 	unsigned int numVertices = sizeof(cubeVertices) / sizeof(GLfloat);
 	unsigned int numIndices = sizeof(cubeIndices) / sizeof(GLfloat);
+
+	calcAverageNormals(8, 5);
 
 	this->mesh = new Mesh();
 	this->mesh->CreateMesh(cubeVertices, cubeIndices, numVertices, numIndices);
@@ -21,13 +22,14 @@ Cube::Cube(glm::mat4 projection, Camera* camera, GLuint topTextureID, GLuint mai
 	this->mainShadowTextureID = mainShadowTextureID;
 }
 
-Cube::Cube(const glm::mat4 projection, Camera* camera, GLuint mainTextureID, GLuint mainShadowTextureID)
+Cube::Cube(const glm::mat4 projection, GLuint mainTextureID, GLuint mainShadowTextureID)
 {
-	this->camera = camera;
 	this->projection = projection;
 
 	unsigned int numVertices = sizeof(cubeVertices) / sizeof(GLfloat);
 	unsigned int numIndices = sizeof(cubeIndices) / sizeof(GLfloat);
+
+	calcAverageNormals(8, 5);
 
 	this->mesh = new Mesh();
 	this->mesh->CreateMesh(cubeVertices, cubeIndices, numVertices, numIndices);
@@ -97,7 +99,7 @@ void Cube::RenderBackFace()
 	mesh->RenderFace(BACK_FACE, mainTextureID);
 }
 
-void Cube::PrepareRender(int uniformModel, int uniformProjection, int uniformView, float x, float y, float z)
+void Cube::PrepareRender(mat4 view, int uniformModel, int uniformProjection, int uniformView, float x, float y, float z)
 {
 	mat4 model(1.0f);
 	model = translate(model, vec3(x, y, z));
@@ -105,9 +107,40 @@ void Cube::PrepareRender(int uniformModel, int uniformProjection, int uniformVie
 
 	glUniformMatrix4fv(uniformModel, 1, GL_FALSE, value_ptr(model));
 	glUniformMatrix4fv(uniformProjection, 1, GL_FALSE, value_ptr(projection));
-	glUniformMatrix4fv(uniformView, 1, GL_FALSE, value_ptr(camera->calculateViewMatrix()));
+	glUniformMatrix4fv(uniformView, 1, GL_FALSE, value_ptr(view));
+}
+
+void Cube::calcAverageNormals(unsigned int vLength, unsigned int normalOffset)
+{
+	unsigned int numVertices = sizeof(cubeVertices) / sizeof(GLfloat);
+	unsigned int numIndices = sizeof(cubeIndices) / sizeof(GLfloat);
+
+	for (size_t i = 0; i < numIndices; i += 3)
+	{
+		unsigned int in0 = cubeIndices[i] * vLength;
+		unsigned int in1 = cubeIndices[i + 1] * vLength;
+		unsigned int in2 = cubeIndices[i + 2] * vLength;
+		glm::vec3 v1(cubeVertices[in1] - cubeVertices[in0], cubeVertices[in1 + 1] - cubeVertices[in0 + 1], cubeVertices[in1 + 2] - cubeVertices[in0 + 2]);
+		glm::vec3 v2(cubeVertices[in2] - cubeVertices[in0], cubeVertices[in2 + 1] - cubeVertices[in0 + 1], cubeVertices[in2 + 2] - cubeVertices[in0 + 2]);
+		glm::vec3 normal = glm::cross(v1, v2);
+		normal = glm::normalize(normal);
+
+		in0 += normalOffset; in1 += normalOffset; in2 += normalOffset;
+		cubeVertices[in0] += normal.x; cubeVertices[in0 + 1] += normal.y; cubeVertices[in0 + 2] += normal.z;
+		cubeVertices[in1] += normal.x; cubeVertices[in1 + 1] += normal.y; cubeVertices[in1 + 2] += normal.z;
+		cubeVertices[in2] += normal.x; cubeVertices[in2 + 1] += normal.y; cubeVertices[in2 + 2] += normal.z;
+	}
+
+	for (size_t i = 0; i < numVertices / vLength; i++)
+	{
+		unsigned int nOffset = i * vLength + normalOffset;
+		glm::vec3 vec(cubeVertices[nOffset], cubeVertices[nOffset + 1], cubeVertices[nOffset + 2]);
+		vec = glm::normalize(vec);
+		cubeVertices[nOffset] = vec.x; cubeVertices[nOffset + 1] = vec.y; cubeVertices[nOffset + 2] = vec.z;
+	}
 }
 
 Cube::~Cube()
 {
 }
+

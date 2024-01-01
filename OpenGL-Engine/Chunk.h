@@ -17,7 +17,7 @@ const int treeId = -1;
 class Chunk
 {
 public:
-	Chunk(Cube* grass, Cube* water, Cube* wood, Cube* leaf, unsigned int seed, int offsetX, int offsetZ);
+	Chunk(Camera camera, Cube* grass, Cube* water, Cube* wood, Cube* leaf, unsigned int seed, int offsetX, int offsetZ);
 
 	void GenerateChunk();
 
@@ -52,5 +52,7 @@ private:
 
 	std::hash<std::string> hashFunction;
 	FastNoiseLite noiseGenerator;
+
+	Camera camera;
 };
 
