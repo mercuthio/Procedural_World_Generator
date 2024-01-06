@@ -17,7 +17,7 @@ const int treeId = -1;
 class Chunk
 {
 public:
-	Chunk(Camera camera, Cube* grass, Cube* water, Cube* wood, Cube* leaf, unsigned int seed, int offsetX, int offsetZ);
+	Chunk(Camera camera, Cube* grass, Cube* stone, Cube* water, Cube* wood, Cube* leaf, unsigned int seed, int offsetX, int offsetZ);
 
 	void GenerateChunk();
 
@@ -44,6 +44,7 @@ private:
 	std::string strSeed;
 
 	Cube* grass;
+	Cube* stone;
 	Cube* water;
 	Cube* wood;
 	Cube* leaf;

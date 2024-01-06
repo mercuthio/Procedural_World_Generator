@@ -35,6 +35,10 @@ void Mesh::CreateMesh(GLfloat *vertices, unsigned int *indices, unsigned int num
 
 void Mesh::RenderFace(GLuint face, GLuint textureId)
 {
+	glEnable(GL_CULL_FACE);
+
+	glCullFace(GL_FRONT);
+
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, textureId);
 
@@ -43,6 +47,8 @@ void Mesh::RenderFace(GLuint face, GLuint textureId)
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, (void*)(face * sizeof(unsigned int)));
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
+
+	glDisable(GL_CULL_FACE);
 }
 
 void Mesh::ClearMesh()

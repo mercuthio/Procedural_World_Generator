@@ -5,7 +5,7 @@
 using namespace glm;
 using namespace std;
 
-Chunk::Chunk(Camera camera, Cube* grass, Cube* water, Cube* wood, Cube* leaf, unsigned int seed, int offsetX, int offsetZ)
+Chunk::Chunk(Camera camera, Cube* grass, Cube* stone, Cube* water, Cube* wood, Cube* leaf, unsigned int seed, int offsetX, int offsetZ)
 {
 	this->camera = camera;
 	this->offsetX = offsetX;
@@ -18,6 +18,7 @@ Chunk::Chunk(Camera camera, Cube* grass, Cube* water, Cube* wood, Cube* leaf, un
 	InitializeChunk();
 
 	this->grass = grass;
+	this->stone = stone;
 	this->water = water;
 	this->wood = wood;
 	this->leaf = leaf;
@@ -49,8 +50,8 @@ void Chunk::GenerateChunk()
 	{
 		for (int z = 0; z < CHUNK_SIZE; z++)
 		{
-			float sampleX = static_cast<float>(x + offsetX) / HILLY;
-			float sampleY = static_cast<float>(z + offsetZ) / HILLY;
+			float sampleX = static_cast<float>(x + offsetX) / FLAT;
+			float sampleY = static_cast<float>(z + offsetZ) / FLAT;
 
 			float perlinValue = noiseGenerator.GetNoise(sampleX, sampleY);
 
@@ -59,7 +60,7 @@ void Chunk::GenerateChunk()
 
 			if (normalizedHash < TREE_SPAWN_RATE)
 			{
-				structures[x][z] = -1;
+				structures[x][z] = treeId;
 			}
 			
 			int heightValue = static_cast<int>((perlinValue + 1.0) * 0.5 * MAX_HEIGHT);
@@ -102,7 +103,21 @@ void Chunk::RenderChunk(int uniformModel, int uniformProjection, int uniformView
 			// Draw under cubes
 			for (int y = 0; y < chunk[x][z] + 1; y++)
 			{
-				currentCube = isWater(x, y, z) ? water : grass;
+				if (!isWater(x, y, z))
+				{
+					if (y < chunk[x][z] - STONE_GRASS_GAP)
+					{
+						currentCube = stone;
+					}
+					else
+					{
+						currentCube = grass;
+					}
+				}
+				else
+				{
+					currentCube = water;
+				}
 
 				currentCube->PrepareRender(view, uniformModel, uniformProjection, uniformView,
 					xPos, (y * CUBE_SIZE), zPos);

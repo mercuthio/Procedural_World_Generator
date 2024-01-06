@@ -13,6 +13,12 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Archivos de encabezado\imgui">
+      <UniqueIdentifier>{8cdbcd46-7e27-45b2-9c71-420bae3b4088}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de origen\imgui">
+      <UniqueIdentifier>{d20e7613-8094-4ad4-ba96-153be0b5087d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Window.h">
@@ -48,6 +54,36 @@
     <ClInclude Include="Light.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
+    <ClInclude Include="ImGuiManager.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Libs\IMGUI\imconfig.h">
+      <Filter>Archivos de encabezado\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Libs\IMGUI\imgui.h">
+      <Filter>Archivos de encabezado\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Libs\IMGUI\imgui_impl_glfw.h">
+      <Filter>Archivos de encabezado\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Libs\IMGUI\imgui_impl_opengl3.h">
+      <Filter>Archivos de encabezado\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Libs\IMGUI\imgui_impl_opengl3_loader.h">
+      <Filter>Archivos de encabezado\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Libs\IMGUI\imgui_internal.h">
+      <Filter>Archivos de encabezado\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Libs\IMGUI\imstb_rectpack.h">
+      <Filter>Archivos de encabezado\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Libs\IMGUI\imstb_textedit.h">
+      <Filter>Archivos de encabezado\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Libs\IMGUI\imstb_truetype.h">
+      <Filter>Archivos de encabezado\imgui</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -75,6 +111,33 @@
       <Filter>Archivos de origen</Filter>
     </ClCompile>
     <ClCompile Include="Light.cpp">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGuiManager.cpp">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Libs\IMGUI\imgui.cpp">
+      <Filter>Archivos de origen\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Libs\IMGUI\imgui_demo.cpp">
+      <Filter>Archivos de origen\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Libs\IMGUI\imgui_draw.cpp">
+      <Filter>Archivos de origen\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Libs\IMGUI\imgui_impl_glfw.cpp">
+      <Filter>Archivos de origen\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Libs\IMGUI\imgui_impl_opengl3.cpp">
+      <Filter>Archivos de origen\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Libs\IMGUI\imgui_tables.cpp">
+      <Filter>Archivos de origen\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Libs\IMGUI\imgui_widgets.cpp">
+      <Filter>Archivos de origen\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="Configuration.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
   </ItemGroup>

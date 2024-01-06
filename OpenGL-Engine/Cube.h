@@ -39,23 +39,23 @@ static GLfloat cubeVertices[] = {
 };
 
 static unsigned int cubeIndices[] = {
-	0, 1, 2,		//front
-	1, 2, 3,		//front
+    0, 2, 1,		// front
+    1, 2, 3,		// front
 
-	4, 5, 6,		//back
-	5, 6, 7,		//back
+	5, 7, 4,		//back
+	4, 7, 6,		//back
 
-	4, 0, 6,		//left
-	6, 2, 0,		//left
+	4, 6, 0,		//left
+	0, 6, 2,		//left
 
-	5, 1, 3,		//right
-	7, 3, 5,		//right
+	1, 3, 5,		//right
+	5, 3, 7,		//right
 
-	8, 9, 10,		//top
-	9, 11, 10,		//top
+	11, 10, 9,		//top
+	9, 10, 8,		//top
 
-	12, 13, 14,		//bottom
-	13, 15, 14,		//bottom
+	13, 12, 15,		//bottom
+	15, 12, 14,		//bottom
 };
 
 class Cube

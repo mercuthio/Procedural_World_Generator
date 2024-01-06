@@ -1,4 +1,5 @@
 #include "Window.h"
+#include "Configuration.h" 
 
 Window::Window()
 {
@@ -51,7 +52,7 @@ int Window::Initialise()
 	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 
 	// Create the window
-	mainWindow = glfwCreateWindow(width, height, "Engine", NULL, NULL);
+	mainWindow = glfwCreateWindow(width, height, WINDOW_NAME, NULL, NULL);
 	if (!mainWindow)
 	{
 		printf("Error creating GLFW window!");
@@ -111,7 +112,13 @@ GLfloat Window::getYChange()
 	return theChange;
 }
 
-void Window::updateFps(GLfloat deltaTime)
+double Window::getFps(GLfloat deltaTime)
+{
+	UpdateFps(deltaTime);
+	return fps;
+}
+
+void Window::UpdateFps(GLfloat deltaTime)
 {
 	numFrames++;
 
@@ -120,12 +127,10 @@ void Window::updateFps(GLfloat deltaTime)
 
 	if (elapseTime >= 1.0)
 	{
-		float fps = numFrames / deltaTime;
+		fps = numFrames / deltaTime;
 
 		numFrames = 0;
 		startTime = glfwGetTime();
-
-		std::cout << "FPS: " << fps << std::endl;
 	}
 }
 
@@ -175,3 +180,4 @@ Window::~Window()
 	glfwDestroyWindow(mainWindow);
 	glfwTerminate();
 }
+

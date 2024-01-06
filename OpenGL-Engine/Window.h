@@ -15,8 +15,11 @@ public:
 
 	int Initialise();
 
+	template <typename Func>
+	void SetResizeCallBack(Func callback) { glfwSetWindowSizeCallback(mainWindow, callback); }
 	GLint getBufferWidth() { return bufferWidth; }
 	GLint getBufferHeight() { return bufferHeight; }
+	GLFWwindow* getWindow() { return mainWindow; }
 
 	bool getShouldClose() { return glfwWindowShouldClose(mainWindow); }
 
@@ -24,12 +27,15 @@ public:
 	GLfloat getXChange();
 	GLfloat getYChange();
 
-	void updateFps(GLfloat deltaTime);
+	double getFps(GLfloat deltaTime);
+	
 	void swapBuffers() { glfwSwapBuffers(mainWindow); }
 
 	~Window();
 
 private:
+	void UpdateFps(GLfloat deltaTime);
+
 	GLFWwindow* mainWindow;
 
 	GLint numFrames;
@@ -37,6 +43,8 @@ private:
 	GLint bufferWidth, bufferHeight;
 
 	bool keys[1024];
+
+	double fps;
 
 	GLfloat lastX;
 	GLfloat lastY;
