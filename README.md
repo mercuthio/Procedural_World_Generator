@@ -1,6 +1,6 @@
  Application that generates in each execution an infinite world in a procedural way, using opengl for its rendering.
 
-it uses OpenGL and GLEW for fractal rendering. GLFW is used for the main window management and ImGUI for the configuration interface.
+It uses OpenGL and GLEW for rendering the world and c++ to generate it, based in a noise generator. GLFW is used for the main window management and ImGUI for the configuration interface.
 
  ![Engine](https://github.com/mercuthio/Procedural_World_Generator/assets/91343476/c8250c5b-bc6d-4025-83a1-2ecbcb87204a)
 
