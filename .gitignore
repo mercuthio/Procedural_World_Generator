@@ -1,5 +1,6 @@
 # Prerequisites
 *.d
+*.log
 
 # Compiled Object files
 *.slo
@@ -32,6 +33,7 @@
 *.app
 
 # Folder
+/OpenGL-Engine/x64/
 /Libs/
 /x64/
 /.vs/
@@ -44,4 +46,9 @@
 *.user
 .vscode/
 *.filters
+*.recipe
+*.iobj
+*.ipdb
+*.tlog
+*.lastbuildstate
 
